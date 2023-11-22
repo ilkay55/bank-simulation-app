@@ -133,10 +133,10 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findAll();
     }
 //
-//    @Override
-//    public List<Transaction> last10Transactions() {
-//        return transactionRepository.findLast10Transactions();
-//    }
+    @Override
+    public List<Transaction> last10Transactions() {
+        return transactionRepository.findLast10Transactions();
+    }
 //
 //    @Override
 //    public List<Transaction> findTransactionListById(UUID id) {
