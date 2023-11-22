@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ilkay.service.AccountService;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Controller
 //@Controller already has @Component functionality, that`s why we do not need to put an extra @Component annotation here
@@ -29,7 +30,7 @@ public class AccountController {
 
     //    @RequestMapping(value="/index", method = RequestMethod.GET)
 //    or if we do not need info from user we simply use GetMapping
-    @GetMapping("/index")
+    @GetMapping( value = {"/index", "/"})
     public String getIndexPage(Model model) {
 
         model.addAttribute("accountList", accountService.listAllAccount());
@@ -59,6 +60,26 @@ public class AccountController {
     public String createAccount(@ModelAttribute("account") Account account){
         System.out.println(account);
         accountService.createNewAccount(account.getBalance(),new Date(),account.getAccountType(),account.getUserId());
+        return "redirect:/index";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String getDeleteAccount(@PathVariable("id")UUID id){
+        //print the id on the console
+        //System.out.println(id);
+
+        accountService.deleteAccount(id);
+
+        return "redirect:/index";
+    }
+
+    @GetMapping("/activate/{id}")
+    public String getActivateAccount(@PathVariable("id")UUID id){
+        //print the id on the console
+        //System.out.println(id);
+
+        accountService.activateAccount(id);
+
         return "redirect:/index";
     }
 }
