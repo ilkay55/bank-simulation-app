@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ilkay</groupId>
-    <artifactId>bank-simulation-app</artifactId>
+    <artifactId>mybank-simulation-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>bank-simulation-app</name>
     <description>bank-simulation-app</description>
