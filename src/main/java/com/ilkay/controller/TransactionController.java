@@ -1,11 +1,20 @@
 package com.ilkay.controller;
 
+import com.ilkay.model.Account;
 import com.ilkay.model.Transaction;
 import com.ilkay.service.AccountService;
 import com.ilkay.service.TransactionService;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.UUID;
 
 @Controller
 public class TransactionController {
@@ -32,4 +41,43 @@ public class TransactionController {
 
         return "transaction/make-transfer";
     }
+
+    @PostMapping("/transfer")
+    public String makeTransfer(@ModelAttribute("transaction") @Valid Transaction transaction, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("accounts", accountService.listAllAccount());
+            model.addAttribute("lastTransactions", transactionService.last10Transactions());
+            return "transaction/make-transfer";
+        }
+
+        //I have UUID of  accounts but I need to provide Account object.
+        //I need to find the Accounts based on the ID that I have and use as a parameter to complete makeTransfer method.
+
+        Account sender = accountService.retrieveById(transaction.getSender());
+        Account receiver = accountService.retrieveById(transaction.getReceiver());
+
+        transactionService.makeTransfer(sender, receiver, transaction.getAmount(), new Date(), transaction.getMessage());
+
+        return "redirect:/make-transfer";
+    }
+
+    //write a method, that gets the account id from index.html and print on the console
+    //(work on index.html and here)
+    //trasaction/{id}
+    //return.transaction/transactions page
+
+    @GetMapping("/transaction/{id}")
+    public String getTransactionList(@PathVariable("id")UUID id, Model model) {
+        //print the id
+        System.out.println(id);
+        //get the list of transactions based on id and return as a model attribute
+        //TASK- complete the method(service and repository)
+        //findTransactionListById
+        model.addAttribute("transactions",transactionService.findTransactionListById(id));
+
+        return "transaction/transactions";
+    }
+    //go to transactions.html
+    //based on size of the transactions either show "No transactions yet" or transactions table
 }

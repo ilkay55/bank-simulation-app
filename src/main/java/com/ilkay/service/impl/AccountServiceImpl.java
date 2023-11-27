@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.save(account);
     }
 
-   @Override
+    @Override
     public List<Account> listAllAccount() {
         return accountRepository.findAll();
     }
@@ -52,9 +52,10 @@ public class AccountServiceImpl implements AccountService {
         //set status to active
         account.setAccountStatus(AccountStatus.ACTIVE);
     }
-//
-//    @Override
-//    public Account retrieveById(UUID id) {
-//        return accountRepository.findById(id);
-//    }
+
+    @Override
+    public Account retrieveById(UUID id) {
+
+        return accountRepository.findById(id);
+    }
 }

@@ -8,6 +8,7 @@ import lombok.NonNull;
 //import javax.validation.constraints.Pattern;
 //import javax.validation.constraints.Positive;
 //import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
@@ -16,14 +17,15 @@ import java.util.UUID;
 @Builder
 public class Transaction {
 
-    @NonNull
+    @NotNull
     private UUID sender;
-//    @NotNull
+    //    @NotNull
+    @NotNull
     private UUID receiver;
-//    @Positive
+    //    @Positive
 //    @NotNull
     private BigDecimal amount;
-//    @NotNull
+    //    @NotNull
 //    @Size(min = 2,max = 250)
 //    @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String message;

@@ -2,7 +2,7 @@ package com.ilkay.controller;
 
 import com.ilkay.enums.AccountType;
 import com.ilkay.model.Account;
-import org.springframework.stereotype.Component;
+import com.ilkay.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,8 @@ import com.ilkay.service.AccountService;
 import java.util.Date;
 import java.util.UUID;
 
-@Controller
 //@Controller already has @Component functionality, that`s why we do not need to put an extra @Component annotation here
+@Controller
 public class AccountController {
 
       /*
@@ -22,8 +22,10 @@ public class AccountController {
 
     private final AccountService accountService;
 
+
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
+
     }
 //we need a regular java method which has always String as Return type
 // because we are returning html path  (location of my html or thymeleaf path)
