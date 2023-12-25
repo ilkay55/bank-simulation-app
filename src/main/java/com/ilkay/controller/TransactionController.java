@@ -1,9 +1,10 @@
 package com.ilkay.controller;
 
-import com.ilkay.model.Account;
-import com.ilkay.model.Transaction;
+import com.ilkay.dto.AccountDTO;
+import com.ilkay.dto.TransactionDTO;
 import com.ilkay.service.AccountService;
 import com.ilkay.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class TransactionController {
     public String getMakeTransfer(Model model) {
         //what we need to provide to make transfer happen
         //we need to provide empty transaction object
-        model.addAttribute("transaction", Transaction.builder().build());
+        model.addAttribute("transaction", TransactionDTO.builder().build());
 
         //we need to provide list of all accounts
         model.addAttribute("accounts", accountService.listAllAccount());
@@ -43,7 +44,7 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public String makeTransfer(@ModelAttribute("transaction") @Valid Transaction transaction, BindingResult bindingResult, Model model) {
+    public String makeTransfer(@ModelAttribute("transaction") @Valid TransactionDTO transactionDTO, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("accounts", accountService.listAllAccount());
@@ -54,10 +55,10 @@ public class TransactionController {
         //I have UUID of  accounts but I need to provide Account object.
         //I need to find the Accounts based on the ID that I have and use as a parameter to complete makeTransfer method.
 
-        Account sender = accountService.retrieveById(transaction.getSender());
-        Account receiver = accountService.retrieveById(transaction.getReceiver());
+        AccountDTO sender = accountService.retrieveById(transactionDTO.getSender());
+        AccountDTO receiver = accountService.retrieveById(transactionDTO.getReceiver());
 
-        transactionService.makeTransfer(sender, receiver, transaction.getAmount(), new Date(), transaction.getMessage());
+        transactionService.makeTransfer(sender, receiver, transactionDTO.getAmount(), new Date(), transactionDTO.getMessage());
 
         return "redirect:/make-transfer";
     }

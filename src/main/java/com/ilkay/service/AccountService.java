@@ -1,15 +1,14 @@
 package com.ilkay.service;
 
+import com.ilkay.dto.AccountDTO;
 import com.ilkay.enums.AccountType;
-import com.ilkay.model.Account;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Date;
 import java.util.UUID;
 
 public interface AccountService {
-    Account createNewAccount(BigDecimal balance, Date createDate, AccountType accountType, Long userID);
+    AccountDTO createNewAccount(BigDecimal balance, Date createDate, AccountType accountType, Long userID);
 
     Object listAllAccount();
 
@@ -18,6 +17,6 @@ public interface AccountService {
 
     void activateAccount(UUID id);
 
-    Account retrieveById(UUID id);
+    AccountDTO retrieveById(UUID id);
 
 }

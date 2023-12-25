@@ -1,21 +1,20 @@
-package com.ilkay.model;
+package com.ilkay.dto;
 
 import com.ilkay.enums.AccountStatus;
 import com.ilkay.enums.AccountType;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
 
-//import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Positive;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
 @Data
 @Builder
-public class Account {
+public class AccountDTO {
 
     private UUID id;
     @NotNull
