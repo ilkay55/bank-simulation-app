@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Date;
-import java.util.UUID;
-
 
 
 //@Controller already has @Component functionality, that`s why we do not need to put an extra @Component annotation here
@@ -53,7 +51,7 @@ public class AccountController {
     @GetMapping("/create-form")
     public String getCreateForm(Model model){
         //we need to provide empty account object
-        model.addAttribute("account", AccountDTO.builder().build());
+        model.addAttribute("account", new AccountDTO());
         //we need to provide accountType enum info for filling the dropdown options
         model.addAttribute("accountTypes", AccountType.values());
 
@@ -77,7 +75,7 @@ public class AccountController {
     }
 
     @GetMapping("/delete/{id}")
-    public String getDeleteAccount(@PathVariable("id")UUID id){
+    public String getDeleteAccount(@PathVariable("id") Long id){
         //print the id on the console
         //System.out.println(id);
 
@@ -87,7 +85,7 @@ public class AccountController {
     }
 
     @GetMapping("/activate/{id}")
-    public String getActivateAccount(@PathVariable("id")UUID id){
+    public String getActivateAccount(@PathVariable("id") Long id){
         //print the id on the console
         //System.out.println(id);
 

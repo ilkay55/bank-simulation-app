@@ -10,6 +10,7 @@ import com.ilkay.exceptions.BalanceNotSufficientException;
 import com.ilkay.exceptions.UnderConstructionException;
 import com.ilkay.repository.AccountRepository;
 import com.ilkay.repository.TransactionRepository;
+import com.ilkay.service.AccountService;
 import com.ilkay.service.TransactionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
@@ -25,11 +25,19 @@ public class TransactionServiceImpl implements TransactionService {
     @Value("${under_construction}")
     private boolean underConstruction;
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final TransactionRepository transactionRepository;
+   // private final TransactionMapper transactionMapper;
 
-    public TransactionServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepository) {
-        this.accountRepository = accountRepository;
+    public TransactionServiceImpl(AccountService accountService,
+                                  TransactionRepository transactionRepository,
+                                  //TransactionMapper transactionMapper,
+                                  AccountRepository accountRepository) {
+        this.accountService = accountService;
         this.transactionRepository = transactionRepository;
+        this.accountRepository = accountRepository;
+      //  this.transactionMapper = transactionMapper;
+
     }
 
     @Override
@@ -55,9 +63,9 @@ public class TransactionServiceImpl implements TransactionService {
             we need to create Transaction object and save/return it.
          */
 
-            TransactionDTO transactionDTO = TransactionDTO.builder().amount(amount)
+            TransactionDTO transactionDTO = new TransactionDTO();/*TransactionDTO.builder().amount(amount)
                     .sender(sender.getId()).receiver(receiver.getId())
-                    .createDate(creationDate).message(message).build();
+                    .createDate(creationDate).message(message).build();*/
 
             //save into the db and return it
             return transactionRepository.save(transactionDTO);
@@ -112,12 +120,12 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         //if accounts are the same throw BadRequestException with saying accounts needs to be different
-        if (sender.getId().equals(receiver.getId())) {
-            throw new BadRequestException("Sender account needs to be different than receiver account");
-        }
+//        if (sender.getId().equals(receiver.getId())) {
+//            throw new BadRequestException("Sender account needs to be different than receiver account");
+//        }
 
-//        findAccountById(sender.getId());
-//        findAccountById(receiver.getId());
+       // findAccountById(sender.getId());
+       // findAccountById(receiver.getId());
 
 
     }
@@ -132,15 +140,18 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.findAll();
     }
-//
+
+    //
     @Override
     public List<TransactionDTO> last10Transactions() {
         return transactionRepository.findLast10Transactions();
     }
-//
+
+    //
     @Override
-    public List<TransactionDTO> findTransactionListById(UUID id) {
-       return transactionRepository.findTransactionListByAccountId(id);}
+    public List<TransactionDTO> findTransactionListById(Long id) {
+        return transactionRepository.findTransactionListByAccountId(id);
+    }
 
 }
 

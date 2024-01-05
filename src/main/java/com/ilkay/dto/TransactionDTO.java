@@ -4,25 +4,26 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
-@Data
-@Builder
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransactionDTO {
     @NotNull
-    private UUID sender;
+    private AccountDTO sender;
     @NotNull
-    private UUID receiver;
+    private AccountDTO receiver;
     @Positive
     @NotNull
     private BigDecimal amount;
     @NotNull
-    @Size(min = 2,max = 250)
+    @Size(min = 2, max = 250)
     @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String message;
     private Date createDate;

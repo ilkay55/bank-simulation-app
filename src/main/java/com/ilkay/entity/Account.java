@@ -1,30 +1,33 @@
-package com.ilkay.dto;
+package com.ilkay.entity;
 
 import com.ilkay.enums.AccountStatus;
 import com.ilkay.enums.AccountType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class AccountDTO {
+@Table(name = "accounts")
+public class Account {
 
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull
-    @Positive
     private BigDecimal balance;
-    @NotNull
+    @Enumerated(EnumType.STRING)
     private AccountType accountType;
+    @Column(columnDefinition = "TIMESTAMP")
     private Date creationDate;
-    @NotNull
     private Long userId;
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
-
 }

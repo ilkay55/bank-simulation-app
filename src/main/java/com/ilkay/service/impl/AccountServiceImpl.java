@@ -1,61 +1,81 @@
 package com.ilkay.service.impl;
 
 import com.ilkay.dto.AccountDTO;
+import com.ilkay.entity.Account;
 import com.ilkay.enums.AccountStatus;
 import com.ilkay.enums.AccountType;
 import com.ilkay.repository.AccountRepository;
 import com.ilkay.service.AccountService;
 import org.springframework.stereotype.Component;
+import com.ilkay.mapper.AccountMapper;
 
+import javax.security.auth.login.AccountNotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository,
+                              AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.accountMapper = accountMapper;
     }
 
     @Override
-    public AccountDTO createNewAccount(BigDecimal balance, Date createDate, AccountType accountType, Long userId) {
+    public void createNewAccount(AccountDTO accountDTO) {
+
         //we need to create Account object
-        AccountDTO accountDTO = AccountDTO.builder().id(UUID.randomUUID()).userId(userId)
-                .balance(balance).accountType(accountType).creationDate(createDate)
-                .accountStatus(AccountStatus.ACTIVE).build();
-        //save into the database(repository)
+        accountDTO.setCreationDate(new Date());
+        accountDTO.setAccountStatus(AccountStatus.ACTIVE);
+
+        //save into the database(repository)*/
         //return the object created
-        return accountRepository.save(accountDTO);
+        accountRepository.save(accountMapper.convertToEntity(accountDTO));
     }
 
     @Override
     public List<AccountDTO> listAllAccount() {
-        return accountRepository.findAll();
+        //we are getting list of account but we need to return list of AccountDTO
+        List<Account> accountList = accountRepository.findAll();
+        //we are converting entity to dto list and return it
+        return accountList
+                .stream()
+                .map(accountMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteAccount(UUID id) {
-        //find the account belongs the id
-        AccountDTO accountDTO = accountRepository.findById(id);
+    public void deleteAccount(Long id) {
+
+        //find the account object based on id
+        Account account = accountRepository.findById(id).get()1;
+//        get yerine daha nizami bu şekilde exception oluşturabiliriz
+//                .orElseThrow(() -> new AccountNotFoundException("Account Not Found"));
+
         //set status to deleted
-        accountDTO.setAccountStatus(AccountStatus.DELETED);
+        account.setAccountStatus(AccountStatus.DELETED);
+        // we need to save the account (updated account object)
+        accountRepository.save(account);
     }
 
     @Override
-    public void activateAccount(UUID id) {
+    public void activateAccount(Long id) {
         //find the account belongs the id
-        AccountDTO accountDTO = accountRepository.findById(id);
+        Account account = accountRepository.findById(id).get();
         //set status to active
-        accountDTO.setAccountStatus(AccountStatus.ACTIVE);
+        account.setAccountStatus(AccountStatus.ACTIVE);
+        accountRepository.save(account);
     }
 
     @Override
-    public AccountDTO retrieveById(UUID id) {
-
-        return accountRepository.findById(id);
+    public AccountDTO retrieveById(Long id) {
+//find the account entity based on id, then convert it dto and return it
+        return accountMapper
+                .convertToDTO(accountRepository.findById(id).get());
     }
 }
