@@ -2,6 +2,7 @@ package com.ilkay.repository;
 
 import com.ilkay.dto.AccountDTO;
 import com.ilkay.entity.Account;
+import com.ilkay.enums.AccountStatus;
 import com.ilkay.exceptions.RecordNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import java.util.List;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-
+List<Account> findAllByAccountStatus(AccountStatus accountStatus);
 
 }
 //

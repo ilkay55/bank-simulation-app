@@ -3,12 +3,14 @@ package com.ilkay.service.impl;
 
 import com.ilkay.dto.AccountDTO;
 import com.ilkay.dto.TransactionDTO;
+import com.ilkay.entity.Account;
+import com.ilkay.entity.Transaction;
 import com.ilkay.enums.AccountType;
 import com.ilkay.exceptions.AccountOwnershipException;
 import com.ilkay.exceptions.BadRequestException;
 import com.ilkay.exceptions.BalanceNotSufficientException;
 import com.ilkay.exceptions.UnderConstructionException;
-import com.ilkay.repository.AccountRepository;
+import com.ilkay.mapper.TransactionMapper;
 import com.ilkay.repository.TransactionRepository;
 import com.ilkay.service.AccountService;
 import com.ilkay.service.TransactionService;
@@ -18,26 +20,27 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
 
     @Value("${under_construction}")
     private boolean underConstruction;
-    private final AccountRepository accountRepository;
+
+    //    private final AccountRepository accountRepository; /for a better design
     private final AccountService accountService;
     private final TransactionRepository transactionRepository;
-   // private final TransactionMapper transactionMapper;
+    private final TransactionMapper transactionMapper;
 
     public TransactionServiceImpl(AccountService accountService,
                                   TransactionRepository transactionRepository,
-                                  //TransactionMapper transactionMapper,
-                                  AccountRepository accountRepository) {
+                                  //AccountRepository accountRepository
+                                  TransactionMapper transactionMapper) {
         this.accountService = accountService;
         this.transactionRepository = transactionRepository;
-        this.accountRepository = accountRepository;
-      //  this.transactionMapper = transactionMapper;
-
+        this.transactionMapper = transactionMapper;
+        //this.accountRepository = accountRepository;
     }
 
     @Override
@@ -124,10 +127,14 @@ public class TransactionServiceImpl implements TransactionService {
 //            throw new BadRequestException("Sender account needs to be different than receiver account");
 //        }
 
-       // findAccountById(sender.getId());
-       // findAccountById(receiver.getId());
+        // findAccountById(sender.getId());
+        // findAccountById(receiver.getId());
 
 
+    }
+
+    private void findAccountById(Long id) {
+        accountService.retrieveById(id);
     }
 
     //
@@ -138,13 +145,24 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDTO> findAllTransaction() {
 
-        return transactionRepository.findAll();
+        List<Transaction> transactionList = transactionRepository.findAll();
+        //get the transaction entity for all and return them as a list of transactionDTO
+        return transactionRepository.findAll()
+                .stream().map(transactionMapper::convertToDTO)
+                .collect(Collectors.toList());
+
     }
 
     //
     @Override
     public List<TransactionDTO> last10Transactions() {
-        return transactionRepository.findLast10Transactions();
+        //we want last 10 latest transactions
+        //write a native query to get the result for last 10 transaction
+        List<Transaction> last10Transactions = transactionRepository.findLast10Transactions();
+
+   return last10Transactions.stream()
+           .map(transactionMapper::convertToDTO)
+           .collect(Collectors.toList());
     }
 
     //

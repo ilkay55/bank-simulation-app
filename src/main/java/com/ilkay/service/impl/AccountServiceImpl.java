@@ -53,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Long id) {
 
         //find the account object based on id
-        Account account = accountRepository.findById(id).get()1;
+        Account account = accountRepository.findById(id).get();
 //        get yerine daha nizami bu şekilde exception oluşturabiliriz
 //                .orElseThrow(() -> new AccountNotFoundException("Account Not Found"));
 
@@ -77,5 +77,21 @@ public class AccountServiceImpl implements AccountService {
 //find the account entity based on id, then convert it dto and return it
         return accountMapper
                 .convertToDTO(accountRepository.findById(id).get());
+    }
+
+    @Override
+    public List<AccountDTO> listAllActiveAccount() {
+
+        List<Account> accountList=accountRepository
+                .findAllByAccountStatus(AccountStatus.ACTIVE);
+
+        return accountList.stream().map(accountMapper::convertToDTO)
+                .collect(Collectors.toList());
+
+//        List<Account> accountList = accountRepository.findAll();
+//        //we are converting entity to dto list and return it
+//        return accountList
+//                .stream().filter(account -> account.getAccountStatus().equals(AccountStatus.ACTIVE))
+//                .map(accountMapper::convertToDTO).collect(Collectors.toList());
     }
 }
