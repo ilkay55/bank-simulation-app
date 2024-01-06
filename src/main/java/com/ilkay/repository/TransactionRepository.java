@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
 
-    @Query(value = "SELECT * FROM transaction ORDER BY create_date DESC LIMIT 10", nativeQuery = true)
-    List<Transaction> findLast10Transactions():
+    @Query(value = "SELECT * FROM transactions ORDER BY create_date DESC LIMIT 10", nativeQuery = true)
+    List<Transaction> findLast10Transactions();
+
+    @Query("SELECT t FROM Transaction t WHERE t.sender.id = ?1 OR t.receiver.id = ?1")
+    List<Transaction> findTransactionListByAccountId(Long id);
+}
 
 //    List<Transaction> findTopByOrderByCreateDateDesc;
 
@@ -34,14 +38,14 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 //    }
 //
 //
-    public default List<Transaction> findLast10Transactions() {
-        //write a stream that sort the transactions based on creation date
-        //and only return 10 of them
-        return transactionList.stream()
-                .sorted(Comparator.comparing(TransactionDTO::getCreateDate).reversed())
-                .limit(10)
-                .collect(Collectors.toList());
-    }
+//    public default List<Transaction> findLast10Transactions() {
+//        //write a stream that sort the transactions based on creation date
+//        //and only return 10 of them
+//        return transactionList.stream()
+//                .sorted(Comparator.comparing(TransactionDTO::getCreateDate).reversed())
+//                .limit(10)
+//                .collect(Collectors.toList());
+//    }
 //
 //    public List<TransactionDTO> findTransactionListByAccountId(Long id) {
 //        //if account id is used either as a sender or receiver, return those transactions
