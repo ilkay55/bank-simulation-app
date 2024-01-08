@@ -31,7 +31,7 @@ public class TransactionController {
     public String getMakeTransfer(Model model) {
         //what we need to provide to make transfer happen
         //we need to provide empty transaction object
-        model.addAttribute("transaction", new TransactionDTO());
+        model.addAttribute("transactionDTO", new TransactionDTO());
 
         //we need to provide list of all accounts
         model.addAttribute("accounts", accountService.listAllActiveAccount());
@@ -43,7 +43,7 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public String makeTransfer(@ModelAttribute("transaction")
+    public String makeTransfer(@ModelAttribute("transactionDTO")
                                    @Valid TransactionDTO transactionDTO,
                                BindingResult bindingResult,
                                Model model) {

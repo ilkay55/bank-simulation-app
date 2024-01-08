@@ -8,9 +8,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface AccountService {
-   void createNewAccount(AccountDTO accountDTO);
+    void createNewAccount(AccountDTO accountDTO);
 
-    Object listAllAccount();
+    List<AccountDTO> listAllAccount();
 
     void deleteAccount(Long id);
 
