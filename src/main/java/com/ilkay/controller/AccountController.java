@@ -3,7 +3,7 @@ package com.ilkay.controller;
 import com.ilkay.dto.AccountDTO;
 import com.ilkay.enums.AccountType;
 import com.ilkay.service.AccountService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +36,7 @@ public class AccountController {
 
     //    @RequestMapping(value="/index", method = RequestMethod.GET)
 //    or if we do not need info from user we simply use GetMapping
-    @GetMapping( value = {"/index", "/"})
+    @GetMapping( value = {"/index"})
     public String getIndexPage(Model model) {
 
         model.addAttribute("accountList", accountService.listAllAccount());

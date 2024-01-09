@@ -2,8 +2,8 @@ package com.ilkay.dto;
 
 import com.ilkay.enums.AccountStatus;
 import com.ilkay.enums.AccountType;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.*;
 
 

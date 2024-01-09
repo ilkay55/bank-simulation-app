@@ -2,9 +2,9 @@ package com.ilkay.entity;
 
 import com.ilkay.enums.AccountStatus;
 import com.ilkay.enums.AccountType;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

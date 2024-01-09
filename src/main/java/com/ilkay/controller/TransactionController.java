@@ -4,7 +4,7 @@ import com.ilkay.dto.AccountDTO;
 import com.ilkay.dto.TransactionDTO;
 import com.ilkay.service.AccountService;
 import com.ilkay.service.TransactionService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
