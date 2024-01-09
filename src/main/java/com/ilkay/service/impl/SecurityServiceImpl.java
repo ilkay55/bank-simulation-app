@@ -1,6 +1,7 @@
 package com.ilkay.service.impl;
 
 import com.ilkay.entity.User;
+import com.ilkay.entity.common.UserPrincipal;
 import com.ilkay.repository.UserRepository;
 import com.ilkay.service.SecurityService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,7 @@ public class SecurityServiceImpl implements SecurityService {
         //TASK
         //we need to get our own user from database. how ?
         User user = userRepository.findByUsername(username);
+// .orElseThrow(()->new UsernameNotFoundException("This user does not exist")); //userrepository de optional kullanırsak
         //return some exception if user doesn't exist
         if(user==null){
             throw new UsernameNotFoundException("This user does not exist");
@@ -28,4 +30,4 @@ public class SecurityServiceImpl implements SecurityService {
         //return user information as a UserDetails
 
         return new UserPrincipal(user);
-    }
+    }}
